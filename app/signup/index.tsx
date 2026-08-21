@@ -18,10 +18,6 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 
 
-import { app } from "@/functions/firebase";
-
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
-
 export default function Signup() {
   const [password, setPassword] = useState<string>("200930Joshua.");
   const [confirmPassword, setConfirmPassword] = useState<string>("200930Joshua.");
@@ -60,24 +56,6 @@ export default function Signup() {
 
     setLoading(true);
     try {
-      const auth = getAuth(app);
-      
-      const user = await createUserWithEmailAndPassword(auth, email, password);
-      console.log('====================================');
-      console.log(user);
-      console.log('====================================');
-
-      const req = await fetch("http://192.168.243.85:3000/api/v1/auth/signup", {
-        method: "POST",
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          email, password, fullName, phoneNumber
-        })
-      });
-      const res = await req.json();
-      console.log(res);
       setLoading(false);
       
     } catch (error) {
