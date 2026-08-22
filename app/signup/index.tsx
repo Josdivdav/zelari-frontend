@@ -56,6 +56,21 @@ export default function Signup() {
 
     setLoading(true);
     try {
+      const response = await fetch("http://192.168.0.109:3000/api/v1/auth/signup", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email,
+          phoneNumber,
+          fullName,
+          password,
+        }),
+      });
+
+      const data = await response.json();
+      console.log(data);
       setLoading(false);
       
     } catch (error) {

@@ -4,7 +4,7 @@ import constantStyles from "@/constant/colors";
 import { checkBiometricSupport, handleBiometrics } from "@/functions/Biometrics";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Image,
   KeyboardAvoidingView,
@@ -25,6 +25,7 @@ export default function Signin() {
   const [emailErr, setEmailErr] = useState<boolean>(false);
   const [passwordErr, setPasswordErr] = useState<boolean>(false);
   const [fp, setFp] = useState<boolean>(false);
+  const [sessionExists, setSessionExists] = useState<boolean>(true);
   
 
   const checkBiometrics = async () => {
@@ -33,12 +34,19 @@ export default function Signin() {
       setFp(true);
     }
   }
-  checkBiometrics();
+
+  useEffect(() => {
+    checkBiometrics();
+  }, []);
   
   const biometricsHandler = async () => {
     handleBiometrics().then((res) => {
       if (res) {
-        router.replace("/(tabs)");
+        setLoading(true);
+        setFp(false);
+        setTimeout(() => {
+          router.replace("/(tabs)");
+        }, 2000);
       }
     });
   }
@@ -130,7 +138,7 @@ export default function Signin() {
 
             <Button disabled={loading} onClick={signInHandler} label="Sign In" />
 
-            { fp && <TouchableOpacity
+            { fp && sessionExists && <TouchableOpacity
                 activeOpacity={0.85}
                 style={styles.biometricButton}
                 disabled={loading}
