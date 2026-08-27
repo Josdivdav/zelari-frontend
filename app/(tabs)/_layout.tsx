@@ -1,22 +1,25 @@
 import { Tabs } from "expo-router";
-import { FontAwesome6, Fontisto, Ionicons } from "@expo/vector-icons";
-import constantStyles from "@/constant/colors";
+import { Ionicons } from "@expo/vector-icons";
+import { useAppTheme } from "@/constant/colors";
 
 
 export default function TabLayout() {
+    const theme = useAppTheme();
+
     return (
         <Tabs screenOptions={{
             headerShown: false,
-            tabBarActiveTintColor: "#097009ff",
+            tabBarActiveTintColor: theme.brandText,
+            tabBarInactiveTintColor: theme.textSoft,
             tabBarStyle: {
-                backgroundColor: constantStyles.statusBarcolor,
+                backgroundColor: theme.surface,
+                borderTopColor: theme.borderSoft,
                 borderTopWidth: 0,
                 elevation: 0,
                 shadowOpacity: 0,
                 height: 60,
             },
             tabBarLabelStyle: {
-                color: "#0f7201ff",
                 fontSize: 12
             },
             animation: "shift"
@@ -26,7 +29,7 @@ export default function TabLayout() {
                 options={{
                     title: "Dashboard",
                     tabBarIcon: ({ color, size, focused }) => (
-                        <Ionicons name={ focused ? "home" : "home-outline" } size={20} color={ focused ? color : "#0f7201ff" } />
+                        <Ionicons name={ focused ? "home" : "home-outline" } size={20} color={color} />
                     )
                 }}/>
             <Tabs.Screen 
@@ -34,7 +37,7 @@ export default function TabLayout() {
                 options={{
                     title: "Transactions",
                     tabBarIcon: ({ color, size, focused }) => (
-                        <Ionicons name={ focused ? "receipt" : "receipt-outline"} size={20} color={ focused ? color : "#0f7201ff" } />
+                        <Ionicons name={ focused ? "receipt" : "receipt-outline"} size={20} color={color} />
                     )
                 }}/>
         </Tabs>

@@ -1,6 +1,6 @@
 import Button from "@/components/Button";
 import InputField from "@/components/InputField";
-import constantStyles from "@/constant/colors";
+import { AppTheme, useAppTheme } from "@/constant/colors";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import { goBack } from "expo-router/build/global-state/routing";
@@ -19,6 +19,8 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function PasswordReset() {
+  const theme = useAppTheme();
+  const styles = createStyles(theme);
   const [email, setEmail] = useState<string>("");
   const [emailErr, setEmailErr] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
@@ -42,7 +44,7 @@ export default function PasswordReset() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar backgroundColor={constantStyles.statusBarcolor} barStyle="dark-content" />
+      <StatusBar backgroundColor={theme.statusBarColor} barStyle={theme.statusBarStyle} />
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : undefined}
         style={styles.keyboardView}
@@ -57,7 +59,7 @@ export default function PasswordReset() {
             style={styles.backButton}
             onPress={() => router.back()}
           >
-            <Ionicons name="chevron-back" color="#087208" size={20} />
+            <Ionicons name="chevron-back" color={theme.brandText} size={20} />
           </TouchableOpacity>
 
           <View style={styles.hero}>
@@ -83,14 +85,14 @@ export default function PasswordReset() {
               </View>
 
               <View style={styles.secureBadge}>
-                <Ionicons name="mail" color="#087208" size={15} />
+                <Ionicons name="mail" color={theme.brandText} size={15} />
                 <Text style={styles.secureText}>Email</Text>
               </View>
             </View>
 
             {sent && (
               <View style={styles.successBox}>
-                <Ionicons name="checkmark-circle" color="#087208" size={19} />
+                <Ionicons name="checkmark-circle" color={theme.positive} size={19} />
                 <Text style={styles.successText}>
                   Reset instructions have been sent to your email.
                 </Text>
@@ -126,7 +128,7 @@ export default function PasswordReset() {
               onPress={() => goBack()}
               disabled={loading}
             >
-              <Ionicons name="log-in-outline" color="#087208" size={18} />
+              <Ionicons name="log-in-outline" color={theme.brandText} size={18} />
               <Text style={styles.signInText}>Back to sign in</Text>
             </TouchableOpacity>
           </View>
@@ -136,10 +138,10 @@ export default function PasswordReset() {
   );
 }
 
-const styles = StyleSheet.create({
+const createStyles = (theme: AppTheme) => StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: constantStyles.foregroundColor,
+    backgroundColor: theme.foregroundColor,
   },
   keyboardView: {
     flex: 1,
@@ -151,8 +153,8 @@ const styles = StyleSheet.create({
   },
   backButton: {
     alignItems: "center",
-    backgroundColor: "#ffffff",
-    borderColor: "#d8f3d8",
+    backgroundColor: theme.surface,
+    borderColor: theme.border,
     borderRadius: 18,
     borderWidth: 1,
     height: 36,
@@ -169,8 +171,8 @@ const styles = StyleSheet.create({
   },
   logoWrap: {
     alignItems: "center",
-    backgroundColor: "#ffffff",
-    borderColor: "#d8f3d8",
+    backgroundColor: theme.surface,
+    borderColor: theme.border,
     borderRadius: 24,
     borderWidth: 1,
     height: 86,
@@ -183,13 +185,13 @@ const styles = StyleSheet.create({
     width: 58,
   },
   title: {
-    color: "#112311",
+    color: theme.text,
     fontSize: 30,
     fontWeight: "800",
     textAlign: "center",
   },
   subtitle: {
-    color: "#5f7d5f",
+    color: theme.textMuted,
     fontSize: 14,
     lineHeight: 21,
     marginTop: 8,
@@ -197,8 +199,8 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   formPanel: {
-    backgroundColor: "#ffffff",
-    borderColor: "#e1f3e1",
+    backgroundColor: theme.surface,
+    borderColor: theme.borderSoft,
     borderRadius: 18,
     borderWidth: 1,
     padding: 18,
@@ -210,20 +212,20 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   panelTitle: {
-    color: "#112311",
+    color: theme.text,
     fontSize: 20,
     fontWeight: "800",
   },
   panelSubtitle: {
-    color: "#6b846b",
+    color: theme.textSoft,
     fontSize: 12,
     marginTop: 3,
     maxWidth: 210,
   },
   secureBadge: {
     alignItems: "center",
-    backgroundColor: "#ecffec",
-    borderColor: "#cceccc",
+    backgroundColor: theme.surfaceSoft,
+    borderColor: theme.border,
     borderRadius: 16,
     borderWidth: 1,
     flexDirection: "row",
@@ -232,14 +234,14 @@ const styles = StyleSheet.create({
     paddingVertical: 6,
   },
   secureText: {
-    color: "#087208",
+    color: theme.brandText,
     fontSize: 12,
     fontWeight: "700",
   },
   successBox: {
     alignItems: "flex-start",
-    backgroundColor: "#f5fff5",
-    borderColor: "#cceccc",
+    backgroundColor: theme.positiveSoft,
+    borderColor: theme.border,
     borderRadius: 14,
     borderWidth: 1,
     flexDirection: "row",
@@ -248,20 +250,20 @@ const styles = StyleSheet.create({
     padding: 12,
   },
   successText: {
-    color: "#315f31",
+    color: theme.textMuted,
     flex: 1,
     fontSize: 12,
     lineHeight: 18,
   },
   errorText: {
-    color: "#b3261e",
+    color: theme.negative,
     fontSize: 12,
     marginBottom: 12,
     marginTop: -12,
   },
   signInButton: {
     alignItems: "center",
-    borderColor: "#d8f3d8",
+    borderColor: theme.border,
     borderRadius: 15,
     borderWidth: 1,
     flexDirection: "row",
@@ -271,7 +273,7 @@ const styles = StyleSheet.create({
     marginTop: 12,
   },
   signInText: {
-    color: "#087208",
+    color: theme.brandText,
     fontSize: 14,
     fontWeight: "700",
   },

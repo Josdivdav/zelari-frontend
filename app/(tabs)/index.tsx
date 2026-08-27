@@ -1,6 +1,6 @@
 import EntryDataProvider from "@/components/EntryDataProvider";
 import MainAction from "@/components/MainAction";
-import constantStyles from "@/constant/colors";
+import { AppTheme, useAppTheme } from "@/constant/colors";
 import { Feather, FontAwesome6, Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import React, { useMemo, useState } from "react";
@@ -30,6 +30,8 @@ const recentActivity = [
 ];
 
 function Index() {
+    const theme = useAppTheme();
+    const styles = createStyles(theme);
     const [showBalance, setShowBalance] = useState<boolean>(false);
     const [balance] = useState<number>(10547);
 
@@ -59,7 +61,7 @@ function Index() {
 
     return (
         <SafeAreaView style={styles.container}>
-            <StatusBar backgroundColor={constantStyles.statusBarcolor} barStyle="dark-content" />
+            <StatusBar backgroundColor={theme.statusBarColor} barStyle={theme.statusBarStyle} />
             <ScrollView
                 showsVerticalScrollIndicator={false}
                 contentContainerStyle={styles.content}
@@ -67,7 +69,7 @@ function Index() {
                 <View style={styles.header}>
                     <View style={styles.profileRow}>
                         <View style={styles.avatar}>
-                            <FontAwesome6 name="user" size={15} color="#0f7201" />
+                            <FontAwesome6 name="user" size={15} color={theme.brandText} />
                         </View>
                         <View>
                             <Text style={styles.greeting}>Good morning</Text>
@@ -76,14 +78,14 @@ function Index() {
                     </View>
 
                     <TouchableOpacity activeOpacity={0.8} style={styles.iconButton}>
-                        <FontAwesome6 name="bell" color="#155b16" size={17} />
+                        <FontAwesome6 name="bell" color={theme.brandText} size={17} />
                     </TouchableOpacity>
                 </View>
 
                 <View style={styles.balanceCard}>
                     <View style={styles.balanceTopRow}>
                         <View style={styles.balanceLabelRow}>
-                            <Ionicons name="shield-checkmark" color="#dfffe2" size={16} />
+                            <Ionicons name="shield-checkmark" color={theme.brandSubtleText} size={16} />
                             <Text style={styles.balanceCaption}>Wallet Balance</Text>
                         </View>
 
@@ -92,7 +94,7 @@ function Index() {
                             style={styles.visibilityButton}
                             onPress={() => setShowBalance((value) => !value)}
                         >
-                            <Feather name={showBalance ? "eye" : "eye-off"} color="#ffffff" size={16} />
+                            <Feather name={showBalance ? "eye" : "eye-off"} color={theme.onBrand} size={16} />
                         </TouchableOpacity>
                     </View>
 
@@ -102,18 +104,18 @@ function Index() {
                     <Text style={styles.balanceSubText}>Available balance</Text>
 
                     <TouchableOpacity activeOpacity={0.85} style={styles.fundButton}>
-                        <Feather name="plus" color="#087208" size={16} />
+                        <Feather name="plus" color={theme.brandText} size={16} />
                         <Text style={styles.fundButtonText}>Fund Wallet</Text>
                     </TouchableOpacity>
                 </View>
 
                 <View style={styles.quickActions}>
-                    <MainAction name="add-circle-outline" size={22} color="#087208" label="Add Money" />
-                    <MainAction name="send" size={20} color="#087208" label="Transfer" />
+                    <MainAction name="add-circle-outline" size={22} color={theme.brandText} label="Add Money" />
+                    <MainAction name="send" size={20} color={theme.brandText} label="Transfer" />
                     <MainAction
                         name="receipt-long"
                         size={20}
-                        color="#087208"
+                        color={theme.brandText}
                         label="History"
                         onPress={() => router.push("/(tabs)/transactions")}
                     />
@@ -127,7 +129,7 @@ function Index() {
                         </View>
                         <TouchableOpacity style={styles.seeAllButton} activeOpacity={0.8}>
                             <Text style={styles.seeAllText}>See all</Text>
-                            <FontAwesome6 name="chevron-right" size={11} color="#087208" />
+                            <FontAwesome6 name="chevron-right" size={11} color={theme.brandText} />
                         </TouchableOpacity>
                     </View>
 
@@ -151,7 +153,7 @@ function Index() {
                         {recentActivity.map((item) => (
                             <View key={item.title} style={styles.activityItem}>
                                 <View style={styles.activityIcon}>
-                                    <Feather name={item.icon as any} color="#087208" size={16} />
+                                    <Feather name={item.icon as any} color={theme.brandText} size={16} />
                                 </View>
                                 <View style={styles.activityDetails}>
                                     <Text style={styles.activityTitle}>{item.title}</Text>
@@ -174,10 +176,10 @@ function Index() {
     );
 }
 
-const styles = StyleSheet.create({
+const createStyles = (theme: AppTheme) => StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: constantStyles.foregroundColor,
+        backgroundColor: theme.foregroundColor,
     },
     content: {
         paddingHorizontal: 18,
@@ -196,8 +198,8 @@ const styles = StyleSheet.create({
     },
     avatar: {
         alignItems: "center",
-        backgroundColor: "#ffffff",
-        borderColor: "#d8f3d8",
+        backgroundColor: theme.surface,
+        borderColor: theme.border,
         borderRadius: 18,
         borderWidth: 1,
         height: 36,
@@ -206,18 +208,18 @@ const styles = StyleSheet.create({
         width: 36,
     },
     greeting: {
-        color: "#5a7a5a",
+        color: theme.textMuted,
         fontSize: 13,
     },
     name: {
-        color: "#112311",
+        color: theme.text,
         fontSize: 20,
         fontWeight: "700",
     },
     iconButton: {
         alignItems: "center",
-        backgroundColor: "#ffffff",
-        borderColor: "#d8f3d8",
+        backgroundColor: theme.surface,
+        borderColor: theme.border,
         borderRadius: 18,
         borderWidth: 1,
         height: 36,
@@ -225,7 +227,7 @@ const styles = StyleSheet.create({
         width: 36,
     },
     balanceCard: {
-        backgroundColor: "#088208",
+        backgroundColor: theme.brandStrong,
         borderRadius: 18,
         marginBottom: 16,
         overflow: "hidden",
@@ -243,7 +245,7 @@ const styles = StyleSheet.create({
         gap: 7,
     },
     balanceCaption: {
-        color: "#eaffea",
+        color: theme.brandSubtleText,
         fontSize: 13,
         fontWeight: "600",
     },
@@ -256,20 +258,20 @@ const styles = StyleSheet.create({
         width: 30,
     },
     balanceAmount: {
-        color: "#ffffff",
+        color: theme.onBrand,
         fontSize: 32,
         fontWeight: "800",
         marginBottom: 4,
     },
     balanceSubText: {
-        color: "#dfffe2",
+        color: theme.brandSubtleText,
         fontSize: 13,
         marginBottom: 18,
     },
     fundButton: {
         alignItems: "center",
         alignSelf: "flex-start",
-        backgroundColor: "#ffffff",
+        backgroundColor: theme.surface,
         borderRadius: 8,
         flexDirection: "row",
         gap: 6,
@@ -277,14 +279,14 @@ const styles = StyleSheet.create({
         paddingVertical: 9,
     },
     fundButtonText: {
-        color: "#087208",
+        color: theme.brandText,
         fontSize: 13,
         fontWeight: "700",
     },
     quickActions: {
         alignItems: "center",
-        backgroundColor: "#ffffff",
-        borderColor: "#e1f3e1",
+        backgroundColor: theme.surface,
+        borderColor: theme.borderSoft,
         borderRadius: 14,
         borderWidth: 1,
         flexDirection: "row",
@@ -293,8 +295,8 @@ const styles = StyleSheet.create({
         paddingVertical: 10,
     },
     section: {
-        backgroundColor: "#ffffff",
-        borderColor: "#e1f3e1",
+        backgroundColor: theme.surface,
+        borderColor: theme.borderSoft,
         borderRadius: 14,
         borderWidth: 1,
         marginBottom: 16,
@@ -307,12 +309,12 @@ const styles = StyleSheet.create({
         marginBottom: 14,
     },
     sectionTitle: {
-        color: "#112311",
+        color: theme.text,
         fontSize: 16,
         fontWeight: "700",
     },
     sectionSubtitle: {
-        color: "#6b846b",
+        color: theme.textSoft,
         fontSize: 12,
         marginTop: 2,
     },
@@ -322,7 +324,7 @@ const styles = StyleSheet.create({
         gap: 6,
     },
     seeAllText: {
-        color: "#087208",
+        color: theme.brandText,
         fontSize: 13,
         fontWeight: "700",
     },
@@ -339,7 +341,7 @@ const styles = StyleSheet.create({
     },
     activityIcon: {
         alignItems: "center",
-        backgroundColor: "#ecffec",
+        backgroundColor: theme.surfaceSoft,
         borderRadius: 18,
         height: 36,
         justifyContent: "center",
@@ -350,12 +352,12 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     activityTitle: {
-        color: "#112311",
+        color: theme.text,
         fontSize: 14,
         fontWeight: "700",
     },
     activityTime: {
-        color: "#6b846b",
+        color: theme.textSoft,
         fontSize: 12,
         marginTop: 2,
     },
@@ -364,10 +366,10 @@ const styles = StyleSheet.create({
         fontWeight: "800",
     },
     credit: {
-        color: "#087208",
+        color: theme.positive,
     },
     debit: {
-        color: "#b3261e",
+        color: theme.negative,
     },
 });
 

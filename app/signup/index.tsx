@@ -1,6 +1,6 @@
 import Button from "@/components/Button";
 import InputField from "@/components/InputField";
-import constantStyles from "@/constant/colors";
+import { AppTheme, useAppTheme } from "@/constant/colors";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import { useState } from "react";
@@ -19,6 +19,8 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 
 export default function Signup() {
+  const theme = useAppTheme();
+  const styles = createStyles(theme);
   const [password, setPassword] = useState<string>("200930Joshua.");
   const [confirmPassword, setConfirmPassword] = useState<string>("200930Joshua.");
   const [email, setEmail] = useState<string>("joshuadivine985@gmail.com");
@@ -68,19 +70,28 @@ export default function Signup() {
           password,
         }),
       });
+      if(response.status !== 200) {
+        const errorData = await response.json();
+        console.log("Error: ", errorData);
+        setLoading(false);
+        return;
+      }
 
-      const data = await response.json();
-      console.log(data);
+      await response.json();
       setLoading(false);
       
-    } catch (error) {
-      console.log(error);
+    } catch (error : any) {
+      if(error.error.includes("Email already exists")) {
+      }
+      setEmailErr(true);
+      setLoading(false);
+      console.log("Error: ", error);
     }
   };
 
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar backgroundColor={constantStyles.statusBarcolor} barStyle="dark-content" />
+      <StatusBar backgroundColor={theme.statusBarColor} barStyle={theme.statusBarStyle} />
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : undefined}
         style={styles.keyboardView}
@@ -111,7 +122,7 @@ export default function Signup() {
               </View>
 
               <View style={styles.stepBadge}>
-                <Ionicons name="person-add" color="#087208" size={15} />
+                <Ionicons name="person-add" color={theme.brandText} size={15} />
                 <Text style={styles.stepText}>New</Text>
               </View>
             </View>
@@ -123,7 +134,7 @@ export default function Signup() {
               placeholder="Email address"
               error={emailErr}
             />
-            {emailErr && <Text style={styles.errorText}>Enter a valid email address.</Text>}
+            {emailErr && <Text style={styles.errorText}>Email already exists or is invalid.</Text>}
 
             <InputField
               type="numberic"
@@ -162,7 +173,7 @@ export default function Signup() {
             {confirmPasswordErr && <Text style={styles.errorText}>Passwords do not match.</Text>}
 
             <View style={styles.termsBox}>
-              <Ionicons name="lock-closed" color="#087208" size={16} />
+              <Ionicons name="lock-closed" color={theme.brandText} size={16} />
               <Text style={styles.termsText}>
                 By signing up you agree to our
                 <Text style={styles.termsLink}> privacy, terms and conditions.</Text>
@@ -188,10 +199,10 @@ export default function Signup() {
   );
 }
 
-const styles = StyleSheet.create({
+const createStyles = (theme: AppTheme) => StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: constantStyles.foregroundColor,
+    backgroundColor: theme.foregroundColor,
   },
   keyboardView: {
     flex: 1,
@@ -208,8 +219,8 @@ const styles = StyleSheet.create({
   },
   logoWrap: {
     alignItems: "center",
-    backgroundColor: "#ffffff",
-    borderColor: "#d8f3d8",
+    backgroundColor: theme.surface,
+    borderColor: theme.border,
     borderRadius: 24,
     borderWidth: 1,
     height: 82,
@@ -222,13 +233,13 @@ const styles = StyleSheet.create({
     width: 56,
   },
   title: {
-    color: "#112311",
+    color: theme.text,
     fontSize: 30,
     fontWeight: "800",
     textAlign: "center",
   },
   subtitle: {
-    color: "#5f7d5f",
+    color: theme.textMuted,
     fontSize: 14,
     lineHeight: 21,
     marginTop: 8,
@@ -236,8 +247,8 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   formPanel: {
-    backgroundColor: "#ffffff",
-    borderColor: "#e1f3e1",
+    backgroundColor: theme.surface,
+    borderColor: theme.borderSoft,
     borderRadius: 18,
     borderWidth: 1,
     padding: 18,
@@ -249,20 +260,20 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   panelTitle: {
-    color: "#112311",
+    color: theme.text,
     fontSize: 20,
     fontWeight: "800",
   },
   panelSubtitle: {
-    color: "#6b846b",
+    color: theme.textSoft,
     fontSize: 12,
     marginTop: 3,
     maxWidth: 210,
   },
   stepBadge: {
     alignItems: "center",
-    backgroundColor: "#ecffec",
-    borderColor: "#cceccc",
+    backgroundColor: theme.surfaceSoft,
+    borderColor: theme.border,
     borderRadius: 16,
     borderWidth: 1,
     flexDirection: "row",
@@ -271,20 +282,20 @@ const styles = StyleSheet.create({
     paddingVertical: 6,
   },
   stepText: {
-    color: "#087208",
+    color: theme.brandText,
     fontSize: 12,
     fontWeight: "700",
   },
   errorText: {
-    color: "#b3261e",
+    color: theme.negative,
     fontSize: 12,
     marginBottom: 12,
     marginTop: -12,
   },
   termsBox: {
     alignItems: "flex-start",
-    backgroundColor: "#f5fff5",
-    borderColor: "#d8f3d8",
+    backgroundColor: theme.surfaceMuted,
+    borderColor: theme.border,
     borderRadius: 14,
     borderWidth: 1,
     flexDirection: "row",
@@ -294,13 +305,13 @@ const styles = StyleSheet.create({
     padding: 12,
   },
   termsText: {
-    color: "#4f674f",
+    color: theme.textMuted,
     flex: 1,
     fontSize: 12,
     lineHeight: 18,
   },
   termsLink: {
-    color: "#087208",
+    color: theme.brandText,
     fontWeight: "800",
   },
   footerLink: {
@@ -308,11 +319,11 @@ const styles = StyleSheet.create({
     marginTop: 22,
   },
   footerText: {
-    color: "#4f674f",
+    color: theme.textMuted,
     fontSize: 14,
   },
   footerTextStrong: {
-    color: "#087208",
+    color: theme.brandText,
     fontWeight: "800",
   },
 });

@@ -1,11 +1,14 @@
 import React from 'react';
-import { Image, Text, TouchableOpacity, View } from 'react-native';
+import { Image, Text, TouchableOpacity } from 'react-native';
+import { useAppTheme } from '@/constant/colors';
 
 interface props {
     label: string
     provider: string
 }
 function EntryDataProvider({ label, provider }: props) {
+    const theme = useAppTheme();
+
     return (
         <TouchableOpacity activeOpacity={0.8} style={{
             width: 60,
@@ -14,22 +17,22 @@ function EntryDataProvider({ label, provider }: props) {
             borderRadius: 10,
             justifyContent: "center",
             gap: 4,
-            backgroundColor: "#ecffec8f",
+            backgroundColor: theme.surfaceSoft,
             padding: 5,
             borderWidth: 1,
-            borderColor: "#0099006e"
+            borderColor: theme.border
         }}>{
-            provider == "airtel" ? (
+            provider === "airtel" ? (
                 <Image source={require(`../assets/providers/airtel.png`)} resizeMode='contain' style={{
                     height: 25,
                     width: 25
                  }}/>
-            ) : provider == "mtn" ? (
+            ) : provider === "mtn" ? (
                 <Image source={require(`../assets/providers/mtn.png`)} resizeMode='contain' style={{
                     height: 25,
                     width: 25
                 }}/>
-            ) : provider == "9mobile" ? (
+            ) : provider === "9mobile" ? (
                 <Image source={require(`../assets/providers/9mobile.png`)} resizeMode='contain' style={{
                     height: 25,
                     width: 25
@@ -43,6 +46,7 @@ function EntryDataProvider({ label, provider }: props) {
         }
             <Text style={{
                 fontSize: 13,
+                color: theme.text,
             }}>{label}</Text>
         </TouchableOpacity>
     );

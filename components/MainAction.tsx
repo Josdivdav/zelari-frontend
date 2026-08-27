@@ -2,6 +2,7 @@ import { MaterialIcons } from '@expo/vector-icons';
 import React from 'react';
 import type { ComponentProps } from 'react';
 import { TouchableOpacity, Text, StyleSheet } from 'react-native';
+import { useAppTheme } from '@/constant/colors';
 
 
 interface props {
@@ -12,12 +13,14 @@ interface props {
     onPress?: any
 }
 function MainAction({ name, size, color, label, onPress } : props) {
+    const theme = useAppTheme();
+
     return (
         <TouchableOpacity activeOpacity={0.5} style={styles.pillBud} onPress={onPress}>
             <MaterialIcons name={name} size={size}  color={color}/>
             <Text style={{
                 fontSize: 10,
-                color: "darkgreen"
+                color: theme.brandText
             }}>{ label }</Text>
         </TouchableOpacity>
     );

@@ -1,4 +1,4 @@
-import constantStyles from "@/constant/colors";
+import { AppTheme, useAppTheme } from "@/constant/colors";
 import { Feather, Ionicons } from "@expo/vector-icons";
 import React, { useMemo, useState } from "react";
 import {
@@ -57,6 +57,8 @@ const transactions = [
 ];
 
 function Transactions() {
+    const theme = useAppTheme();
+    const styles = createStyles(theme);
     const [activeFilter, setActiveFilter] = useState<string>("All");
 
     const currency = useMemo(
@@ -91,7 +93,7 @@ function Transactions() {
 
     return (
         <SafeAreaView style={styles.container}>
-            <StatusBar backgroundColor={constantStyles.statusBarcolor} barStyle="dark-content" />
+            <StatusBar backgroundColor={theme.statusBarColor} barStyle={theme.statusBarStyle} />
             <ScrollView
                 showsVerticalScrollIndicator={false}
                 contentContainerStyle={styles.content}
@@ -103,7 +105,7 @@ function Transactions() {
                     </View>
 
                     <TouchableOpacity activeOpacity={0.8} style={styles.headerButton}>
-                        <Feather name="download" color="#087208" size={18} />
+                        <Feather name="download" color={theme.brandText} size={18} />
                     </TouchableOpacity>
                 </View>
 
@@ -117,7 +119,7 @@ function Transactions() {
                         </View>
 
                         <View style={styles.summaryBadge}>
-                            <Ionicons name="checkmark-circle" color="#087208" size={15} />
+                            <Ionicons name="checkmark-circle" color={theme.brandText} size={15} />
                             <Text style={styles.summaryBadgeText}>Updated</Text>
                         </View>
                     </View>
@@ -182,7 +184,7 @@ function Transactions() {
                                     >
                                         <Feather
                                             name={transaction.icon as any}
-                                            color={isCredit ? "#087208" : "#b3261e"}
+                                            color={isCredit ? theme.positive : theme.negative}
                                             size={16}
                                         />
                                     </View>
@@ -217,10 +219,10 @@ function Transactions() {
     );
 }
 
-const styles = StyleSheet.create({
+const createStyles = (theme: AppTheme) => StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: constantStyles.foregroundColor,
+        backgroundColor: theme.foregroundColor,
     },
     content: {
         paddingHorizontal: 18,
@@ -234,20 +236,20 @@ const styles = StyleSheet.create({
         marginBottom: 18,
     },
     eyebrow: {
-        color: "#5a7a5a",
+        color: theme.textMuted,
         fontSize: 13,
         fontWeight: "600",
     },
     title: {
-        color: "#112311",
+        color: theme.text,
         fontSize: 28,
         fontWeight: "800",
         marginTop: 2,
     },
     headerButton: {
         alignItems: "center",
-        backgroundColor: "#ffffff",
-        borderColor: "#d8f3d8",
+        backgroundColor: theme.surface,
+        borderColor: theme.border,
         borderRadius: 18,
         borderWidth: 1,
         height: 36,
@@ -255,7 +257,7 @@ const styles = StyleSheet.create({
         width: 36,
     },
     summaryCard: {
-        backgroundColor: "#087208",
+        backgroundColor: theme.brandStrong,
         borderRadius: 18,
         marginBottom: 16,
         padding: 18,
@@ -267,19 +269,19 @@ const styles = StyleSheet.create({
         marginBottom: 18,
     },
     summaryLabel: {
-        color: "#dfffe2",
+        color: theme.brandSubtleText,
         fontSize: 13,
         fontWeight: "600",
     },
     summaryAmount: {
-        color: "#ffffff",
+        color: theme.onBrand,
         fontSize: 30,
         fontWeight: "800",
         marginTop: 6,
     },
     summaryBadge: {
         alignItems: "center",
-        backgroundColor: "#ffffff",
+        backgroundColor: theme.surface,
         borderRadius: 15,
         flexDirection: "row",
         gap: 5,
@@ -287,7 +289,7 @@ const styles = StyleSheet.create({
         paddingVertical: 6,
     },
     summaryBadgeText: {
-        color: "#087208",
+        color: theme.brandText,
         fontSize: 12,
         fontWeight: "800",
     },
@@ -302,16 +304,16 @@ const styles = StyleSheet.create({
         padding: 12,
     },
     metricLabel: {
-        color: "#dfffe2",
+        color: theme.brandSubtleText,
         fontSize: 12,
         marginBottom: 5,
     },
     creditText: {
-        color: "#087208",
+        color: theme.positive,
         fontWeight: "800",
     },
     debitText: {
-        color: "#b3261e",
+        color: theme.negative,
         fontWeight: "800",
     },
     filterRow: {
@@ -321,28 +323,28 @@ const styles = StyleSheet.create({
     },
     filterChip: {
         alignItems: "center",
-        backgroundColor: "#ffffff",
-        borderColor: "#d8f3d8",
+        backgroundColor: theme.surface,
+        borderColor: theme.border,
         borderRadius: 18,
         borderWidth: 1,
         flex: 1,
         paddingVertical: 10,
     },
     filterChipActive: {
-        backgroundColor: "#087208",
-        borderColor: "#087208",
+        backgroundColor: theme.brandStrong,
+        borderColor: theme.brandStrong,
     },
     filterText: {
-        color: "#087208",
+        color: theme.brandText,
         fontSize: 13,
         fontWeight: "800",
     },
     filterTextActive: {
-        color: "#ffffff",
+        color: theme.onBrand,
     },
     section: {
-        backgroundColor: "#ffffff",
-        borderColor: "#e1f3e1",
+        backgroundColor: theme.surface,
+        borderColor: theme.borderSoft,
         borderRadius: 14,
         borderWidth: 1,
         padding: 14,
@@ -351,12 +353,12 @@ const styles = StyleSheet.create({
         marginBottom: 14,
     },
     sectionTitle: {
-        color: "#112311",
+        color: theme.text,
         fontSize: 16,
         fontWeight: "800",
     },
     sectionSubtitle: {
-        color: "#6b846b",
+        color: theme.textSoft,
         fontSize: 12,
         marginTop: 2,
     },
@@ -376,27 +378,27 @@ const styles = StyleSheet.create({
         width: 36,
     },
     creditIcon: {
-        backgroundColor: "#ecffec",
+        backgroundColor: theme.positiveSoft,
     },
     debitIcon: {
-        backgroundColor: "#fff0ee",
+        backgroundColor: theme.negativeSoft,
     },
     transactionDetails: {
         flex: 1,
         paddingRight: 10,
     },
     transactionTitle: {
-        color: "#112311",
+        color: theme.text,
         fontSize: 14,
         fontWeight: "800",
     },
     transactionDescription: {
-        color: "#6b846b",
+        color: theme.textSoft,
         fontSize: 12,
         marginTop: 2,
     },
     transactionDate: {
-        color: "#8ba08b",
+        color: theme.textFaint,
         fontSize: 11,
         marginTop: 3,
     },
@@ -407,7 +409,7 @@ const styles = StyleSheet.create({
         fontSize: 13,
     },
     statusText: {
-        color: "#7f957f",
+        color: theme.textFaint,
         fontSize: 11,
         marginTop: 4,
     },

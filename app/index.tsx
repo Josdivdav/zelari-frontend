@@ -1,5 +1,5 @@
 import Button from "@/components/Button";
-import constantStyles from "@/constant/colors";
+import { AppTheme, useAppTheme } from "@/constant/colors";
 import { Feather, Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import { Image, StatusBar, StyleSheet, Text, TouchableOpacity, View } from "react-native";
@@ -21,9 +21,12 @@ const trustItems = [
 ];
 
 export default function Index() {
+  const theme = useAppTheme();
+  const styles = createStyles(theme);
+
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar backgroundColor={constantStyles.statusBarcolor} barStyle="dark-content" />
+      <StatusBar backgroundColor={theme.statusBarColor} barStyle={theme.statusBarStyle} />
 
       <View style={styles.content}>
         <View style={styles.brandRow}>
@@ -48,7 +51,7 @@ export default function Index() {
             </View>
 
             <View style={styles.secureBadge}>
-              <Ionicons name="lock-closed" color="#087208" size={14} />
+              <Ionicons name="lock-closed" color={theme.brandText} size={14} />
               <Text style={styles.secureText}>Secure</Text>
             </View>
           </View>
@@ -61,7 +64,7 @@ export default function Index() {
               <Text style={styles.statValue}>+₦24,000</Text>
             </View>
             <View style={styles.statPill}>
-              <Feather name="arrow-up-right" color="#087208" size={18} />
+              <Feather name="arrow-up-right" color={theme.brandText} size={18} />
             </View>
           </View>
         </View>
@@ -77,7 +80,7 @@ export default function Index() {
           {trustItems.map((item) => (
             <View key={item.label} style={styles.trustItem}>
               <View style={styles.trustIcon}>
-                <Ionicons name={item.icon as any} color="#087208" size={16} />
+                <Ionicons name={item.icon as any} color={theme.brandText} size={16} />
               </View>
               <Text style={styles.trustLabel}>{item.label}</Text>
             </View>
@@ -100,10 +103,10 @@ export default function Index() {
   );
 }
 
-const styles = StyleSheet.create({
+const createStyles = (theme: AppTheme) => StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: constantStyles.foregroundColor,
+    backgroundColor: theme.foregroundColor,
     padding: 20,
   },
   content: {
@@ -117,8 +120,8 @@ const styles = StyleSheet.create({
   },
   logoWrap: {
     alignItems: "center",
-    backgroundColor: "#ffffff",
-    borderColor: "#d8f3d8",
+    backgroundColor: theme.surface,
+    borderColor: theme.border,
     borderRadius: 20,
     borderWidth: 1,
     height: 62,
@@ -131,17 +134,17 @@ const styles = StyleSheet.create({
     width: 42,
   },
   brandName: {
-    color: "#112311",
+    color: theme.text,
     fontSize: 24,
     fontWeight: "800",
   },
   brandSubtext: {
-    color: "#5f7d5f",
+    color: theme.textMuted,
     fontSize: 13,
     marginTop: 2,
   },
   previewCard: {
-    backgroundColor: "#087208",
+    backgroundColor: theme.brandStrong,
     borderRadius: 22,
     marginBottom: 30,
     padding: 20,
@@ -152,19 +155,19 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   previewLabel: {
-    color: "#dfffe2",
+    color: theme.brandSubtleText,
     fontSize: 13,
     fontWeight: "600",
   },
   previewAmount: {
-    color: "#ffffff",
+    color: theme.onBrand,
     fontSize: 29,
     fontWeight: "800",
     marginTop: 8,
   },
   secureBadge: {
     alignItems: "center",
-    backgroundColor: "#ffffff",
+    backgroundColor: theme.surface,
     borderRadius: 15,
     flexDirection: "row",
     gap: 5,
@@ -172,7 +175,7 @@ const styles = StyleSheet.create({
     paddingVertical: 6,
   },
   secureText: {
-    color: "#087208",
+    color: theme.brandText,
     fontSize: 12,
     fontWeight: "800",
   },
@@ -187,18 +190,18 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   statLabel: {
-    color: "#dfffe2",
+    color: theme.brandSubtleText,
     fontSize: 12,
   },
   statValue: {
-    color: "#ffffff",
+    color: theme.onBrand,
     fontSize: 16,
     fontWeight: "800",
     marginTop: 3,
   },
   statPill: {
     alignItems: "center",
-    backgroundColor: "#ffffff",
+    backgroundColor: theme.surface,
     borderRadius: 17,
     height: 34,
     justifyContent: "center",
@@ -208,13 +211,13 @@ const styles = StyleSheet.create({
     marginBottom: 22,
   },
   title: {
-    color: "#112311",
+    color: theme.text,
     fontSize: 34,
     fontWeight: "800",
     lineHeight: 40,
   },
   subtitle: {
-    color: "#5f7d5f",
+    color: theme.textMuted,
     fontSize: 15,
     lineHeight: 23,
     marginTop: 12,
@@ -224,8 +227,8 @@ const styles = StyleSheet.create({
   },
   trustItem: {
     alignItems: "center",
-    backgroundColor: "#ffffff",
-    borderColor: "#e1f3e1",
+    backgroundColor: theme.surface,
+    borderColor: theme.borderSoft,
     borderRadius: 14,
     borderWidth: 1,
     flexDirection: "row",
@@ -233,7 +236,7 @@ const styles = StyleSheet.create({
   },
   trustIcon: {
     alignItems: "center",
-    backgroundColor: "#ecffec",
+    backgroundColor: theme.surfaceSoft,
     borderRadius: 16,
     height: 32,
     justifyContent: "center",
@@ -241,7 +244,7 @@ const styles = StyleSheet.create({
     width: 32,
   },
   trustLabel: {
-    color: "#234123",
+    color: theme.text,
     flex: 1,
     fontSize: 14,
     fontWeight: "700",
@@ -251,7 +254,7 @@ const styles = StyleSheet.create({
   },
   signInButton: {
     alignItems: "center",
-    borderColor: "#d8f3d8",
+    borderColor: theme.border,
     borderRadius: 15,
     borderWidth: 1,
     height: 54,
@@ -259,7 +262,7 @@ const styles = StyleSheet.create({
     marginTop: 12,
   },
   signInText: {
-    color: "#087208",
+    color: theme.brandText,
     fontSize: 14,
     fontWeight: "800",
   },

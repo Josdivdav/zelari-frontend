@@ -1,6 +1,7 @@
 import { Feather } from '@expo/vector-icons';
+import { useAppTheme } from '@/constant/colors';
 import React, { useState } from 'react';
-import { Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { TextInput, TouchableOpacity, View } from 'react-native';
 
 interface field {
     value: string
@@ -13,34 +14,38 @@ interface field {
 function InputField({ value, placeholder, type, onChangeText, error } : field) {
 
     const [show, setShow] = useState(false);
+    const theme = useAppTheme();
     
     return (
         <View style={{
             width: "100%",
             height: "auto",
             borderRadius: 15,
-            backgroundColor: "#fafafaff",
+            backgroundColor: theme.isDark ? theme.surfaceMuted : "#fafafa",
             marginBottom: 20,
             display: "flex",
             alignItems: "center",
             padding: 8,
-            boxShadow: `0 0 2px 1px ${ error ? "red" : "#57575711" }`,
+            borderColor: error ? theme.negative : theme.borderSoft,
+            borderWidth: 1,
+            boxShadow: `0 0 2px 1px ${ error ? theme.negative : theme.shadow }`,
             flexDirection: "row"
         }}>
             <TextInput 
                 placeholder={placeholder} 
-                placeholderTextColor={"#555"} 
-                cursorColor="#090" 
+                placeholderTextColor={theme.textFaint} 
+                cursorColor={theme.brand} 
                 value={value}
                 onChangeText={onChangeText}
                 autoCapitalize="none"
-                secureTextEntry={type == "password" && !show}
-                textContentType={type == "password" ? "password" : "nameSuffix"}
+                secureTextEntry={type === "password" && !show}
+                textContentType={type === "password" ? "password" : "nameSuffix"}
                 style={{
                     flex: 1,
+                    color: theme.text,
                     marginRight: 8
                 }}/>
-            { type == "password" && <TouchableOpacity style={{
+            { type === "password" && <TouchableOpacity style={{
                 marginRight: 5
             }} onPress={() => {
                 if(!show) {
@@ -49,7 +54,7 @@ function InputField({ value, placeholder, type, onChangeText, error } : field) {
                     setShow(false);
                 }
             }} activeOpacity={0.8}>
-                <Feather name={ show ? "eye" : "eye-off"} size={20} color={"#555555"}/>
+                <Feather name={ show ? "eye" : "eye-off"} size={20} color={theme.textSoft}/>
             </TouchableOpacity> }
         </View>
     );

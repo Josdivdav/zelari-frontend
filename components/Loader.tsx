@@ -1,23 +1,18 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { Animated, Easing, View } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View } from 'react-native';
+import { useAppTheme } from '@/constant/colors';
 
 function Loader() {
     const [i, seti] = useState<number>(0);
-    
-    const [inte, setInte] = useState<any>(null);
+    const theme = useAppTheme();
 
     useEffect(() => {
-        clearInterval(inte);
+        const interval = setInterval(() => {
+            seti((value) => (value < 3 ? value + 1 : 0));
+        }, 60);
 
-        setInte(setInterval(() => {
-            if(i < 3) {
-    
-                seti(i + 1);
-            } else {
-                seti(0);
-            }
-        }, 60));
-    }, [i]);
+        return () => clearInterval(interval);
+    }, []);
     
     return (
         <View style={{
@@ -29,25 +24,25 @@ function Loader() {
                 height: 12,
                 width: 4,
                 borderRadius: 10,
-                backgroundColor: i == 0 ? "green" : "white",
+                backgroundColor: i === 0 ? theme.brand : theme.onBrand,
             }} />
             <View style={{
                 height: 12,
                 width: 4,
                 borderRadius: 10,
-                backgroundColor: i == 1 ? "green" : "white",
+                backgroundColor: i === 1 ? theme.brand : theme.onBrand,
             }} />
             <View style={{
                 height: 12,
                 width: 4,
                 borderRadius: 10,
-                backgroundColor: i == 2 ? "green" : "white",
+                backgroundColor: i === 2 ? theme.brand : theme.onBrand,
             }} />
             <View style={{
                 height: 12,
                 width: 4,
                 borderRadius: 10,
-                backgroundColor: i == 3 ? "green" : "white",
+                backgroundColor: i === 3 ? theme.brand : theme.onBrand,
             }} />
         </View>
     );

@@ -1,6 +1,6 @@
 import Button from "@/components/Button";
 import InputField from "@/components/InputField";
-import constantStyles from "@/constant/colors";
+import { AppTheme, useAppTheme } from "@/constant/colors";
 import { checkBiometricSupport, handleBiometrics } from "@/functions/Biometrics";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
@@ -19,13 +19,15 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function Signin() {
+  const theme = useAppTheme();
+  const styles = createStyles(theme);
   const [password, setPassword] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
   const [emailErr, setEmailErr] = useState<boolean>(false);
   const [passwordErr, setPasswordErr] = useState<boolean>(false);
   const [fp, setFp] = useState<boolean>(false);
-  const [sessionExists, setSessionExists] = useState<boolean>(true);
+  const [sessionExists] = useState<boolean>(true);
   
 
   const checkBiometrics = async () => {
@@ -74,7 +76,7 @@ export default function Signin() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar backgroundColor={constantStyles.statusBarcolor} barStyle="dark-content" />
+      <StatusBar backgroundColor={theme.statusBarColor} barStyle={theme.statusBarStyle} />
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : undefined}
         style={styles.keyboardView}
@@ -105,7 +107,7 @@ export default function Signin() {
               </View>
 
               <View style={styles.secureBadge}>
-                <Ionicons name="shield-checkmark" color="#087208" size={15} />
+                <Ionicons name="shield-checkmark" color={theme.brandText} size={15} />
                 <Text style={styles.secureText}>Secure</Text>
               </View>
             </View>
@@ -131,7 +133,7 @@ export default function Signin() {
             <TouchableOpacity
               activeOpacity={0.75}
               style={styles.forgotButton}
-              onPress={() => router.push("/password-reset/")}
+              onPress={() => router.push("/password-reset")}
             >
               <Text style={styles.forgotText}>Reset password</Text>
             </TouchableOpacity>
@@ -144,7 +146,7 @@ export default function Signin() {
                 disabled={loading}
                 onPress={biometricsHandler}
               >
-              <Ionicons name="finger-print" color="#087208" size={18} />
+              <Ionicons name="finger-print" color={theme.brandText} size={18} />
               <Text style={styles.biometricText}>Use biometrics</Text>
             </TouchableOpacity>}
           </View>
@@ -155,7 +157,7 @@ export default function Signin() {
             onPress={() => router.push("/signup")}
           >
             <Text style={styles.footerText}>
-              Don't have an account?
+              Don{"'"}t have an account?
               <Text style={styles.footerTextStrong}> Sign up</Text>
             </Text>
           </TouchableOpacity>
@@ -165,10 +167,10 @@ export default function Signin() {
   );
 }
 
-const styles = StyleSheet.create({
+const createStyles = (theme: AppTheme) => StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: constantStyles.foregroundColor,
+    backgroundColor: theme.foregroundColor,
   },
   keyboardView: {
     flex: 1,
@@ -184,8 +186,8 @@ const styles = StyleSheet.create({
   },
   logoWrap: {
     alignItems: "center",
-    backgroundColor: "#ffffff",
-    borderColor: "#d8f3d8",
+    backgroundColor: theme.surface,
+    borderColor: theme.border,
     borderRadius: 24,
     borderWidth: 1,
     height: 86,
@@ -198,13 +200,13 @@ const styles = StyleSheet.create({
     width: 58,
   },
   title: {
-    color: "#112311",
+    color: theme.text,
     fontSize: 30,
     fontWeight: "800",
     textAlign: "center",
   },
   subtitle: {
-    color: "#5f7d5f",
+    color: theme.textMuted,
     fontSize: 14,
     lineHeight: 21,
     marginTop: 8,
@@ -212,8 +214,8 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   formPanel: {
-    backgroundColor: "#ffffff",
-    borderColor: "#e1f3e1",
+    backgroundColor: theme.surface,
+    borderColor: theme.borderSoft,
     borderRadius: 18,
     borderWidth: 1,
     padding: 18,
@@ -225,19 +227,19 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   panelTitle: {
-    color: "#112311",
+    color: theme.text,
     fontSize: 20,
     fontWeight: "800",
   },
   panelSubtitle: {
-    color: "#6b846b",
+    color: theme.textSoft,
     fontSize: 12,
     marginTop: 3,
   },
   secureBadge: {
     alignItems: "center",
-    backgroundColor: "#ecffec",
-    borderColor: "#cceccc",
+    backgroundColor: theme.surfaceSoft,
+    borderColor: theme.border,
     borderRadius: 16,
     borderWidth: 1,
     flexDirection: "row",
@@ -246,12 +248,12 @@ const styles = StyleSheet.create({
     paddingVertical: 6,
   },
   secureText: {
-    color: "#087208",
+    color: theme.brandText,
     fontSize: 12,
     fontWeight: "700",
   },
   errorText: {
-    color: "#b3261e",
+    color: theme.negative,
     fontSize: 12,
     marginBottom: 12,
     marginTop: -12,
@@ -262,13 +264,13 @@ const styles = StyleSheet.create({
     marginTop: -4,
   },
   forgotText: {
-    color: "#087208",
+    color: theme.brandText,
     fontSize: 13,
     fontWeight: "700",
   },
   biometricButton: {
     alignItems: "center",
-    borderColor: "#d8f3d8",
+    borderColor: theme.border,
     borderRadius: 15,
     borderWidth: 1,
     flexDirection: "row",
@@ -278,7 +280,7 @@ const styles = StyleSheet.create({
     marginTop: 12,
   },
   biometricText: {
-    color: "#087208",
+    color: theme.brandText,
     fontSize: 14,
     fontWeight: "700",
   },
@@ -287,11 +289,11 @@ const styles = StyleSheet.create({
     marginTop: 22,
   },
   footerText: {
-    color: "#4f674f",
+    color: theme.textMuted,
     fontSize: 14,
   },
   footerTextStrong: {
-    color: "#087208",
+    color: theme.brandText,
     fontWeight: "800",
   },
 });
