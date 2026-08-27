@@ -68,10 +68,34 @@ export default function Signin() {
     setPasswordErr(false);
     setLoading(true);
 
-    router.replace("/(tabs)");
     setTimeout(() => {
+      router.replace("/(tabs)");
       setLoading(false);
     }, 2000);
+
+    try {
+      const response = await fetch("http://192.168.0.109:3000/api/v1/auth/signin", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email,
+          password,
+        }),
+      });
+      const data = await response.json();
+
+      if (!response.ok) {
+        console.log("Error: ", data);
+        return;
+      }
+      
+    } catch (error : any) {
+      console.log("Error: ", error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -89,7 +113,7 @@ export default function Signin() {
           <View style={styles.hero}>
             <View style={styles.logoWrap}>
               <Image
-                source={require("../../assets/images/brand-logo.png")}
+                source={require("../../assets/images/brand-logo-dark.png")}
                 resizeMode="contain"
                 style={styles.logo}
               />

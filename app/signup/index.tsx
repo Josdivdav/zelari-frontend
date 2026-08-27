@@ -70,22 +70,20 @@ export default function Signup() {
           password,
         }),
       });
-      if(response.status !== 200) {
-        const errorData = await response.json();
-        console.log("Error: ", errorData);
-        setLoading(false);
+      const data = await response.json();
+
+      if (!response.ok) {
+        if (data?.message?.includes("Email already exists")) {
+          setEmailErr(true);
+        }
+        console.log("Error: ", data);
         return;
       }
-
-      await response.json();
-      setLoading(false);
       
     } catch (error : any) {
-      if(error.error.includes("Email already exists")) {
-      }
-      setEmailErr(true);
-      setLoading(false);
       console.log("Error: ", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -102,14 +100,6 @@ export default function Signup() {
           showsVerticalScrollIndicator={false}
         >
           <View style={styles.hero}>
-            <View style={styles.logoWrap}>
-              <Image
-                source={require("../../assets/images/brand-logo.png")}
-                resizeMode="contain"
-                style={styles.logo}
-              />
-            </View>
-
             <Text style={styles.title}>Create account</Text>
             <Text style={styles.subtitle}>Set up your Zelari wallet in a few quick steps.</Text>
           </View>

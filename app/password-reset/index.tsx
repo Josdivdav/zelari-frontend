@@ -65,7 +65,7 @@ export default function PasswordReset() {
           <View style={styles.hero}>
             <View style={styles.logoWrap}>
               <Image
-                source={require("../../assets/images/brand-logo.png")}
+                source={require("../../assets/images/brand-logo-dark.png")}
                 resizeMode="contain"
                 style={styles.logo}
               />

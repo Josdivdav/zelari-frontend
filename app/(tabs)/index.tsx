@@ -3,7 +3,7 @@ import MainAction from "@/components/MainAction";
 import { AppTheme, useAppTheme } from "@/constant/colors";
 import { Feather, FontAwesome6, Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import {
     ScrollView,
     StatusBar,
@@ -48,13 +48,11 @@ function Index() {
         []
     );
 
-    const fetchDB = async () => {
-        const req = await fetch("http://192.168.43.212:3000/");
-        const res = await req.json();
-        
-        setUsername(res.result);
-    }
-    fetchDB()
+    useEffect(() => {
+        // Fetch user data from API or local storage
+        // For demonstration, we'll just set a static username
+        setUsername("Divine David");
+    }, []);
 
     const hiddenBalance = "••••••••";
     const balanceLabel = showBalance ? currency.format(balance) : hiddenBalance;

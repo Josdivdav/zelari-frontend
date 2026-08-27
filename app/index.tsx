@@ -32,7 +32,7 @@ export default function Index() {
         <View style={styles.brandRow}>
           <View style={styles.logoWrap}>
             <Image
-              source={require("../assets/images/brand-logo.png")}
+              source={require("../assets/images/brand-logo-dark.png")}
               resizeMode="contain"
               style={styles.logo}
             />
@@ -89,15 +89,7 @@ export default function Index() {
       </View>
 
       <View style={styles.actions}>
-        <Button label="Get Started" icon onClick={() => router.push("/signup")} />
-
-        <TouchableOpacity
-          activeOpacity={0.85}
-          style={styles.signInButton}
-          onPress={() => router.push("/signin")}
-        >
-          <Text style={styles.signInText}>I already have an account</Text>
-        </TouchableOpacity>
+        <Button label="Get Started" icon onClick={() => router.push("/signin")} />
       </View>
     </SafeAreaView>
   );
