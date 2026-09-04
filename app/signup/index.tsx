@@ -1,6 +1,7 @@
 import Button from "@/components/Button";
 import InputField from "@/components/InputField";
 import { AppTheme, useAppTheme } from "@/constant/colors";
+import { apiUrl } from "@/constant/conn";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import { useState } from "react";
@@ -21,11 +22,14 @@ import { SafeAreaView } from "react-native-safe-area-context";
 export default function Signup() {
   const theme = useAppTheme();
   const styles = createStyles(theme);
-  const [password, setPassword] = useState<string>("200930Joshua.");
-  const [confirmPassword, setConfirmPassword] = useState<string>("200930Joshua.");
-  const [email, setEmail] = useState<string>("joshuadivine985@gmail.com");
-  const [phoneNumber, setPhoneNumber] = useState<string>("09044013437");
-  const [fullName, setFullName] = useState<string>("Divine David");
+  const logoSource = theme.isDark
+    ? require("../../assets/images/brand-logo-dark.png")
+    : require("../../assets/images/brand-logo.png");
+  const [password, setPassword] = useState<string>("");
+  const [confirmPassword, setConfirmPassword] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
+  const [phoneNumber, setPhoneNumber] = useState<string>("");
+  const [fullName, setFullName] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
   const [emailErr, setEmailErr] = useState<boolean>(false);
   const [phoneErr, setPhoneErr] = useState<boolean>(false);
@@ -58,7 +62,7 @@ export default function Signup() {
 
     setLoading(true);
     try {
-      const response = await fetch("http://192.168.0.109:3000/api/v1/auth/signup", {
+      const response = await fetch(`${apiUrl}/api/v1/auth/signup`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -100,6 +104,14 @@ export default function Signup() {
           showsVerticalScrollIndicator={false}
         >
           <View style={styles.hero}>
+            <View style={styles.logoWrap}>
+              <Image
+                source={logoSource}
+                resizeMode="contain"
+                style={styles.logo}
+              />
+            </View>
+
             <Text style={styles.title}>Create account</Text>
             <Text style={styles.subtitle}>Set up your Zelari wallet in a few quick steps.</Text>
           </View>

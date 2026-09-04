@@ -60,7 +60,7 @@ export type AppTheme = (typeof themes)[keyof typeof themes];
 export function useAppTheme(): AppTheme {
   const scheme = useColorScheme();
 
-  return scheme === "dark" ? themes.dark : themes.light;
+  return (scheme === "dark") ? themes.dark : themes.light;
 }
 
 export default themes.light;

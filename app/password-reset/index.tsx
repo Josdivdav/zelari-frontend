@@ -21,6 +21,9 @@ import { SafeAreaView } from "react-native-safe-area-context";
 export default function PasswordReset() {
   const theme = useAppTheme();
   const styles = createStyles(theme);
+  const logoSource = theme.isDark
+    ? require("../../assets/images/brand-logo-dark.png")
+    : require("../../assets/images/brand-logo.png");
   const [email, setEmail] = useState<string>("");
   const [emailErr, setEmailErr] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
@@ -65,7 +68,7 @@ export default function PasswordReset() {
           <View style={styles.hero}>
             <View style={styles.logoWrap}>
               <Image
-                source={require("../../assets/images/brand-logo-dark.png")}
+                source={logoSource}
                 resizeMode="contain"
                 style={styles.logo}
               />

@@ -1,6 +1,8 @@
 import EntryDataProvider from "@/components/EntryDataProvider";
 import MainAction from "@/components/MainAction";
 import { AppTheme, useAppTheme } from "@/constant/colors";
+import { apiUrl } from "@/constant/conn";
+import { getToken } from "@/functions/auth";
 import { Feather, FontAwesome6, Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import React, { useEffect, useMemo, useState } from "react";
@@ -48,11 +50,32 @@ function Index() {
         []
     );
 
+    const getUserData = async () => {
+        const token = await getToken();
+        if (!token) {
+            console.log("No token found");
+            return;
+        }
+        try {
+            const response = await fetch(`${apiUrl}/api/v1/users/`, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`,
+                },
+            });
+            const data = await response.json();
+            console.log(data);
+            setUsername(data.user.fullName);
+        } catch(error : any) {
+            console.log(error);
+        }
+    }
+
     useEffect(() => {
-        // Fetch user data from API or local storage
-        // For demonstration, we'll just set a static username
-        setUsername("Divine David");
+        getUserData();
     }, []);
+
 
     const hiddenBalance = "••••••••";
     const balanceLabel = showBalance ? currency.format(balance) : hiddenBalance;

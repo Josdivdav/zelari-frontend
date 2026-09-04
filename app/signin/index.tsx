@@ -1,6 +1,8 @@
 import Button from "@/components/Button";
 import InputField from "@/components/InputField";
 import { AppTheme, useAppTheme } from "@/constant/colors";
+import { apiUrl } from "@/constant/conn";
+import { deleteToken, getToken, saveToken } from "@/functions/auth";
 import { checkBiometricSupport, handleBiometrics } from "@/functions/Biometrics";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
@@ -21,14 +23,16 @@ import { SafeAreaView } from "react-native-safe-area-context";
 export default function Signin() {
   const theme = useAppTheme();
   const styles = createStyles(theme);
+  const logoSource = theme.isDark
+    ? require("../../assets/images/brand-logo-dark.png")
+    : require("../../assets/images/brand-logo.png");
   const [password, setPassword] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
   const [emailErr, setEmailErr] = useState<boolean>(false);
   const [passwordErr, setPasswordErr] = useState<boolean>(false);
   const [fp, setFp] = useState<boolean>(false);
-  const [sessionExists] = useState<boolean>(true);
-  
+  const [sessionExists, setSessionExists] = useState<boolean>(false);
 
   const checkBiometrics = async () => {
     const biometrics = await checkBiometricSupport();
@@ -38,7 +42,14 @@ export default function Signin() {
   }
 
   useEffect(() => {
-    checkBiometrics();
+    const checkSession = async () => {
+      await checkBiometrics();
+      const session = await getToken();
+      if(session) {
+        setSessionExists(true);
+      }
+    };
+    checkSession();
   }, []);
   
   const biometricsHandler = async () => {
@@ -68,13 +79,8 @@ export default function Signin() {
     setPasswordErr(false);
     setLoading(true);
 
-    setTimeout(() => {
-      router.replace("/(tabs)");
-      setLoading(false);
-    }, 2000);
-
     try {
-      const response = await fetch("http://192.168.0.109:3000/api/v1/auth/signin", {
+      const response = await fetch(`${apiUrl}/api/v1/auth/signin`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -86,9 +92,19 @@ export default function Signin() {
       });
       const data = await response.json();
 
+      console.log(data);
+
       if (!response.ok) {
         console.log("Error: ", data);
+        setEmailErr(true);
+        setPasswordErr(true);
         return;
+      }
+
+      const st = await saveToken(data.token);
+
+      if(st) {
+        router.replace("/(tabs)");
       }
       
     } catch (error : any) {
@@ -113,7 +129,7 @@ export default function Signin() {
           <View style={styles.hero}>
             <View style={styles.logoWrap}>
               <Image
-                source={require("../../assets/images/brand-logo-dark.png")}
+                source={logoSource}
                 resizeMode="contain"
                 style={styles.logo}
               />
