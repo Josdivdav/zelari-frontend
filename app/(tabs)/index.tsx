@@ -1,8 +1,7 @@
 import EntryDataProvider from "@/components/EntryDataProvider";
 import MainAction from "@/components/MainAction";
 import { AppTheme, useAppTheme } from "@/constant/colors";
-import { apiUrl } from "@/constant/conn";
-import { getToken } from "@/functions/auth";
+import { getUserData } from "@/functions/home.func";
 import { Feather, FontAwesome6, Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import React, { useEffect, useMemo, useState } from "react";
@@ -29,19 +28,25 @@ const recentActivity = [
         time: "Yesterday, 4:12 PM",
         amount: "-₦2,500",
     },
+    {
+        icon: "send",
+        title: "Money Transfer",
+        time: "Yesterday, 3:12 PM",
+        amount: "-₦20,500",
+    },
 ];
 
 function Index() {
     const theme = useAppTheme();
     const styles = createStyles(theme);
     const [showBalance, setShowBalance] = useState<boolean>(false);
-    const [balance] = useState<number>(10547);
+    const [balance, setBalance] = useState<number>(125500000);
 
+    const [updateTime, setUpdateTime] = useState<number>((new Date().getMinutes()));
     const [username, setUsername] = useState<string>("");
 
 
-    const currency = useMemo(
-        () =>
+    const currency = useMemo(() =>
             new Intl.NumberFormat("en-NG", {
                 style: "currency",
                 currency: "NGN",
@@ -50,31 +55,23 @@ function Index() {
         []
     );
 
-    const getUserData = async () => {
-        const token = await getToken();
-        if (!token) {
-            console.log("No token found");
-            return;
-        }
-        try {
-            const response = await fetch(`${apiUrl}/api/v1/users/`, {
-                method: "GET",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": `Bearer ${token}`,
-                },
-            });
-            const data = await response.json();
-            console.log(data);
-            setUsername(data.user.fullName);
-        } catch(error : any) {
-            console.log(error);
-        }
-    }
-
     useEffect(() => {
-        getUserData();
-    }, []);
+        const u = async () => {
+            const res = await getUserData();
+            console.log(res);
+            setUsername(res?.user?.fullName);
+            setBalance(res?.account?.balance);
+        }
+        u();
+    }, [updateTime]);
+
+    
+    setInterval(() => {
+        const rnT = new Date().getMinutes();
+        if(rnT != updateTime) {
+            setUpdateTime(rnT);
+        }
+    });
 
 
     const hiddenBalance = "••••••••";
@@ -109,7 +106,15 @@ function Index() {
                             <Ionicons name="shield-checkmark" color={theme.brandSubtleText} size={16} />
                             <Text style={styles.balanceCaption}>Wallet Balance</Text>
                         </View>
-
+                        
+                        {/* <TouchableOpacity
+                            activeOpacity={0.8}
+                            style={styles.visibilityButton}
+                            onPress={() => setShowBalance((value) => !value)}
+                        >
+                            <Feather name={showBalance ? "eye" : "eye-off"} color={theme.onBrand} size={16} />
+                        </TouchableOpacity> */}
+                        
                         <TouchableOpacity
                             activeOpacity={0.8}
                             style={styles.visibilityButton}
@@ -171,8 +176,8 @@ function Index() {
                     </View>
 
                     <View style={styles.activityList}>
-                        {recentActivity.map((item) => (
-                            <View key={item.title} style={styles.activityItem}>
+                        {recentActivity.map((item, key) => (
+                            <View key={key} style={styles.activityItem}>
                                 <View style={styles.activityIcon}>
                                     <Feather name={item.icon as any} color={theme.brandText} size={16} />
                                 </View>
